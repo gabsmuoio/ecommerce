@@ -1,0 +1,46 @@
+{% load static %}
+{% load omfilters %}
+
+<div class="table-responsive">
+    <table class="table">
+        <tr>
+            <th class="d-none d-lg-block">Imagem</th>
+            <th>Produto</th>
+            <th>V.</th>
+            <th>QTD.</th>
+            <th>Total</th>
+        </tr>
+
+        {% for prod_req in carrinho.values %}
+        <tr>
+            <td class="d-none d-lg-block">
+                <img class="cart-img" src="{% get_media_prefix %}{{ prod_req.imagem }}">
+            </td>
+            <td>
+                <a href="{% url 'produto:detalhe' prod_req.slug %}">
+                    {{ prod_req.produto_nome}}
+                    <a class="ml-3" href="{% url 'produto:removerdocarrinho' %}?vid={{ prod_req.variacao_id}}">
+                        <i class="fas fa-times-circle text-danger" aria-hidden="true"></i>
+                    </a>
+            </td>
+            <td>{{ prod_req.variacao_nome }}</td>
+            <td>{{ prod_req.quantidade }} x
+                {% if prod_req.preco_unitario_promocional %}
+                {{ prod_req.preco_unitario_promocional|formata_preco }}
+                {% else %}
+                {{ prod_req.preco_unitario|formata_preco }}
+                {% endif %}
+
+            </td>
+            {% if prod_req.preco_quantitativo_promocional %}
+            <td>{{ prod_req.preco_quantitativo_promocional|formata_preco }}</td>
+            {% else %}
+            <td>{{ prod_req.preco_quantitativo|formata_preco }}</td>
+            {% endif %}
+
+        </tr>
+        {% endfor %}
+
+
+    </table>
+</div>
