@@ -7,11 +7,11 @@ from django.views import View
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
+from perfil.resources import PerfilResource
 import copy
 
 from . import models
 from . import forms
-
 
 class BasePerfil(View):
     template_name = 'perfil/criar.html'
@@ -194,3 +194,14 @@ class Logout(View):
         self.request.session.save()
 
         return redirect('produto:lista')
+
+def export(request):
+    perfil_resource = PerfilResource()
+    dataset = perfil_resource.export()
+    #response = HttpResponse(dataset.csv, content_type='text/csv')
+    #response['Content-Disposition'] = 'attachment; filename="member.csv"'
+    #response = HttpResponse(dataset.json, content_type='application/json')
+    #response['Content-Disposition'] = 'attachment; filename="persons.json"'
+    response = HttpResponse(dataset.xls, content_type='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="persons.xls"'
+    return response

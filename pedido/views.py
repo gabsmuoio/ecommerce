@@ -5,7 +5,9 @@ from django.views.generic import ListView, DetailView
 from django.views import View
 from django.http import HttpResponse
 from django.contrib import messages
+from pedido.resources import ItemPedidoResource
 
+from .utils import get_plot
 from produto.models import Variacao
 from .models import Pedido, ItemPedido
 
@@ -143,3 +145,26 @@ class Lista(DispatchLoginRequiredMixin, ListView):
     template_name = 'pedido/lista.html'
     paginate_by = 3
     ordering = ['-id']
+    print(context_object_name)
+
+
+def export(request):
+    itempedido_resource = ItemPedidoResource()
+    dataset = itempedido_resource.export()
+    # response = HttpResponse(dataset.csv, content_type='text/csv')
+    # response['Content-Disposition'] = 'attachment; filename="member.csv"'
+    # response = HttpResponse(dataset.json, content_type='application/json')
+    # response['Content-Disposition'] = 'attachment; filename="persons.json"'
+    response = HttpResponse(
+        dataset.xls, content_type='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="itenspedidos.xls"'
+    return response
+
+
+def main_view(request):
+    qs = Pedido.objects.all()
+    x = [x.pk for x in qs]
+    y = [y.total for y in qs]
+    chart = get_plot(x, y)
+
+    return render(request, 'pedido/grafico.html', {'chart': chart})

@@ -12,6 +12,7 @@ class Perfil(models.Model):
     class Meta:
         verbose_name = 'Perfil'
         verbose_name_plural = 'Perfis'
+        db_table = 'perfil_perfil'
 
     usuario = models.OneToOneField(User, on_delete=models.CASCADE)
     data_nasc = models.DateField()

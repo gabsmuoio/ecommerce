@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Gráfico de {{ user }} | {% endblock %}
+
+{% block conteudo %}
+
+    {% if chart %}
+        <img src="data:image/png;base64, {{ chart|safe }}">
+
+    {% endif %}
+
+{% endblock conteudo %}

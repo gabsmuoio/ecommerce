@@ -38,6 +38,15 @@
     </div>
 </div>
 
+<div class="row mt-4">
+    <div class="col">
+        <a href="{% url 'pedido:grafico' %}" class="btn btn-primary btn-block btn-lg">Ver gráfico</a>
+    </div>
+    <div class="col">
+        <a href="{% url 'pedido:export' %}" class="btn btn-primary btn-block btn-lg">Download</a>
+    </div>
+</div>
+
 {% include 'partials/_pagination.html' %}
 
 {% endblock conteudo %}
